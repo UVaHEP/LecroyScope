@@ -19,7 +19,8 @@ waveformSettings = inst.ask('WAVEFORM_SETUP?')
 print 'Sequence: {0}, Waveform: {1}'.format(seq, waveformSettings)
 
 #Enable Sequence Mode
-inst.write('SEQ ON, 5, 1000')
+inst.write('SEQ ON,500')
+#inst.write('SEQ OFF')
 seq = inst.ask("SEQUENCE?")
 print 'Sequence: {0}, Waveform: {1}'.format(seq, waveformSettings)
 inst.close()

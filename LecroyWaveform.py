@@ -23,7 +23,7 @@ data_array = waveformBase.format(2, 'DATA_ARRAY_1')
 data_array_size = waveformBase.format(2, 'WAVE_ARRAY_COUNT')
 template = 'TEMPLATE?'
 
-print inst.ask(template)
+#print inst.ask(template)
 
 data =  inst.ask(data_array)
 count =  inst.ask(data_array_size).split(':')[2].strip()
@@ -41,7 +41,6 @@ f = open('output.dat','w')
 for l in data:
     f.write(l)
 f.close()
-exit()
 data = map( lambda x: x.strip(), data.split('"'))
 
 
