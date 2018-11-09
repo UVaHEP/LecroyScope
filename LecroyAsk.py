@@ -16,7 +16,7 @@ print 'Found {0}'.format(scope)
 
 waveformBase = "C{0}:INSP? '{1}'"
 description = 'C{0}:INSP? "WAVEDESC"'
-simple = 'C4:INSP? "SIMPLE",BYTE'
+simple = 'C1:INSP? "SIMPLE",BYTE'
 trigger = "TRIG_SELECT?"
 trigset = 'TRSE EDGE,SR,C2,HT,OFF'
 trigLevel = 'C2:TRLV -0.1V'
@@ -42,9 +42,10 @@ trigLevel = 'C2:TRLV -0.1V'
 #f.close()
 #print inst.ask(simple)
 
-print inst.ask('TDIV?')
+#print inst.ask('TDIV?')
+print inst.ask(description.format(1))
 print inst.ask(description.format(2))
 print inst.ask(description.format(3))
 print inst.ask(description.format(4))
-
+print inst.ask(simple.format(1))
 inst.close()

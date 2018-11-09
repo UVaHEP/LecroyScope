@@ -24,11 +24,13 @@ tBase = inst.ask(timeBase)
 print "Count: {0}".format(count)
 print "Horiz Interval: {0}".format(hinterval)
 print "Timebase: {0}".format(tBase)
-#Test with channel 2
-request = 'C2:WAVEFORM? '
-data = inst.ask_raw(request)
+#Read out all channels
+request = 'C{0}:WAVEFORM? "WAVEDESC"'
+for i in range(1,5):
+    data = inst.ask_raw(request.format(i))
+    f = open('outputBinC{0}.dat'.format(i), 'w')
+    f.write(data)
+    f.close()
 inst.close()
-f = open('outputBin2.dat', 'w')
-f.write(data)
-f.close()
+
 

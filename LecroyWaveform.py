@@ -19,7 +19,7 @@ waveformBase = "C{0}:INSP? '{1}'"
 trigTime = waveformBase.format(2, 'TRIGGER_TIME')
 horizInterval = waveformBase.format(2, 'HORIZ_INTERVAL')
 vertUnit = waveformBase.format(2, 'VERTUNIT')
-data_array = waveformBase.format(2, 'DATA_ARRAY_1')
+data_array = waveformBase.format(1, 'DATA_ARRAY_1')
 data_array_size = waveformBase.format(2, 'WAVE_ARRAY_COUNT')
 template = 'TEMPLATE?'
 

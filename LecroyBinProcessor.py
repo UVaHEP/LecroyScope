@@ -83,7 +83,7 @@ hdr = generateHeader('varlist.txt')
 
 
 
-f = open('outputBinC4.dat','rb')
+f = open('outputBinC1.dat','rb')
 data = f.read()
 f.close()
 
@@ -118,6 +118,9 @@ print 'wavearray', header['WAVE_ARRAY_1'][2]
 print 'wavearray2', header['WAVE_ARRAY_2'][2]
 print 'res array2',header['RES_ARRAY2'][2]
 print 'res array3',header['RES_ARRAY3'][2]
+print 'vert unit',header['VERT_UNIT'][2]
+print 'Vertical Gain',header['VERTICAL_GAIN'][2]
+print 'Vertical Offset',header['VERTICAL_OFFSET'][2]
 
 
 trigTime = [] 
@@ -154,17 +157,31 @@ for i in range(0, len(waves)/seqLen):
     seq = waves[start:stop]
     v_gain = header['VERTICAL_GAIN'][2]
     v_off = header['VERTICAL_OFFSET'][2]
+
     f = open(fname.format(i),'w')
     for pt in range(0,len(seq)):
-        f.write(str(horinterval*pt+trigTime[i][1]))
+
+        #convert to signed
+        vVal = ord(seq[pt])
+        if vVal > 127:
+            vVal -= 256
+            
+            
+        if header['TRIGTIME_ARRAY'][2] != 0:
+            f.write(str(horinterval*pt+trigTime[i][1]))
+        else:
+            f.write(str(horinterval*pt))
         f.write(',')
-        f.write( str(processPoint(ord(seq[pt]), v_gain, v_off)))
+        f.write( str(processPoint(vVal, v_gain, v_off)))
         f.write('\n')
 
-        
-        out.write(str(horinterval*pt+trigTime[i][1]))
+        if header['TRIGTIME_ARRAY'][2] != 0:
+            out.write(str(horinterval*pt+trigTime[i][1]))
+        else:
+            out.write(str(horinterval*pt))
+            
         out.write(',')
-        out.write( str(processPoint(ord(seq[pt]), v_gain, v_off)))
+        out.write( str(processPoint(vVal, v_gain, v_off)))
         out.write('\n')
     f.close()
     out.write('\n\n------------\n\n')
