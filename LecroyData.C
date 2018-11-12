@@ -47,9 +47,9 @@ void ChannelData::SetSamples(char *dat, Int_t n) {
   int sum=0;
   for (int i=0; i<50; i++) {
     sum+=TMath::Abs((int)v[i]-median);
-  }                        // estimate noise as
-  float noise=1.0*sum/25;  // mean excursion of points around median
-  sigSig=max/noise-1;
+  }                        // estimate noise as mean excursion of points
+  float noise=1.0*sum/25;  // around first samples in waveform.  This is ~OK,
+  sigSig=max/noise-1;      // as long as there is no large pileup in that location
 }
 
 

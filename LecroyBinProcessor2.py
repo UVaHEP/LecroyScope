@@ -137,7 +137,7 @@ def getHeader(data):
 	hdrtpl = getHeaderTemplate('varlist.txt')
         
         # Offset determined from template, 26 bytes before you get to the wave header
-	offset = 26
+	offset = HEADER_OFFSET
 	hdrdata = {}
 	end = 0
 	header = {}
@@ -179,63 +179,6 @@ def getTrigTime(seqcount,trigtime):
 	trigTime.append((struct.unpack('d', trigtime[start:stop])[0], struct.unpack('d', trigtime[stop:stop+8])[0]))
         #print trigTime[-1]
     return trigTime
-
-# return list of trigger times in tuple (time from 1st trigger, offset from current trigger)
-def getTrigTime_old(header,data):
-	trigTime = []
-        trigStart=header["TRIGGER_START"]
-        trigSize=header['TRIGTIME_ARRAY'][2]
-	if header['TRIGTIME_ARRAY'][2] != 0:
-		print 'Trig Time!',trigStart,trigSize,len(data)
-		trigtime =  data[trigStart:trigStart+trigSize]
-                print len(trigtime)/16,header['SUBARRAY_COUNT'][2]
-		if len(trigtime)/16 == header['SUBARRAY_COUNT'][2]:  ## check length of trigger block
-			print 'Trig Time data array looks good.'     ## replace w/ assert
-		seqcount = header['SUBARRAY_COUNT'][2]
-		pos = 0
-		for i in range(0, seqcount):
-			start = i*16
-			stop = start+8
-			trigTime.append((struct.unpack('d', trigtime[start:stop])[0], struct.unpack('d', trigtime[stop:stop+8])[0]))
-        return trigTime
-
-
-
-    
-# probably can make this cleaner!
-def getSamples(n,header,data):  # return voltage array for wave_n
-    waveStart=header['WAVE_START']
-    waveSize=header['WAVE_ARRAY_1'][2]
-    nStart=waveStart+n*header['SEQ_LEN']
-    nEnd=nStart+header['SEQ_LEN']
-    seq=data[nStart:nEnd]
-    v_gain = header['VERTICAL_GAIN'][2]
-    v_off = header['VERTICAL_OFFSET'][2]
-    volts = header['SEQ_LEN']*[None]
-    for pt in range(header['SEQ_LEN']):
-        vVal = ord(seq[pt])
-	if vVal > 127: vVal -= 256
-        volts[pt]=processPoint(vVal, v_gain, v_off)
-    return volts
-
-def getTimes(n,header,data):  # return array of time samples for wave_n
-    horinterval = header['HORIZ_INTERVAL'][2]  # time between samples
-    trg_off=0
-    # handle successive time stamps if in sequence mode
-    if n==0: trg_off = header['HORIZ_OFFSET'][2]     # trigger offset
-    elif header['SEQ_MODE']:
-        trigTime=getTrigTime(header,data)            # trigger time array
-        trg_off=trigTime[i][1]
-    
-    time = header['SEQ_LEN']*[None]
-    for pt in range(header['SEQ_LEN']):
-        time[pt]=horinterval*pt+trg_off
-    return time    
-    
-def getWave(n,header,data):
-    volts=getSamples(n,header,data)
-    time=getTimes(n,header,data)
-    return time,volts
 
 
 
@@ -306,7 +249,14 @@ class ChanDat:
     def PrintHeader(self):
         printHeader(self.header)
 
-    
+
+# open 1..4 data files in parallel and fill TTree with scope channel data
+# -n limits number of events to be read
+# -z applies zero suppression: requires hits in chan 1 & (2||3 ) & 4
+#    ZSP thresholds are defined below and calculated in LecroyData::SetSamples
+#    This is an ad hoc definition.
+# -o optionial output file name
+
 if __name__ == '__main__':
     debug=False
 
