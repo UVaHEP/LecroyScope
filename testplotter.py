@@ -29,7 +29,7 @@ def testreader(fname="lecroy.root",eventnum=0):
     t.GetEntry(eventnum)
     print "plotting event number",eventnum
     calibrate=False  # set to True to graph data in volts
-    sequential=False # set to True to use sequentail times on x-axis
+    sequential=False # set to True to use sequential times on x-axis
     for i in range(4):
         tc.cd(i+1)
         if chan[i].ChannelOn():

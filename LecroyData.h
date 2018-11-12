@@ -10,7 +10,7 @@ using std::vector;
 
 class ChannelData {
 public:
-  ChannelData() : chanOn(false) {;}
+  ChannelData() : chanOn(false), chanID(-1) {;}
   // Simple Getters
   Bool_t ChannelOn() const {return chanOn;}
   Int_t ChannelID() const {return chanID;}
@@ -41,7 +41,7 @@ public:
 		    Int_t hour, Int_t min, Int_t sec);
   void SetTimeFine(Double_t sec){fracSec=sec;}
 
-  TGraph *GetGraph(Bool_t calib=false, Bool_t sequential=false) const;
+  TGraph* GetGraph(Bool_t calib=false, Bool_t sequential=false) const;
   //  void AddSample(Float_t s) {v.push_back(s);}
   void SetSamples(char *dat, Int_t n);
   Int_t GetNsamples() const {return v.size();}

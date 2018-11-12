@@ -55,7 +55,7 @@ void ChannelData::SetSamples(char *dat, Int_t n) {
 
 
 void ChannelData::Print() const{
-  cout << "=== Channel " << chanID << "=== " << endl;
+  cout << "=== Channel " << chanID << " ===" << endl;
   cout << "Enabled " << chanOn << endl;
   if (! chanOn) return;
   cout << "N samples " << GetNpoints() << endl;
