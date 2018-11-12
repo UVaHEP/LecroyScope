@@ -2,6 +2,8 @@ import struct,sys
 import argparse
 from array import array
 from math import modf
+import glob 
+import os.path 
 
 
 # keep ROOT TApplication from grabbing -h flag
@@ -271,6 +273,8 @@ if __name__ == '__main__':
                         help="Maximum number of events to process")
     parser.add_argument('-z','--useZSP', default=None, action="store_true",
                         help="use zero suppression to require signal")
+    parser.add_argument('-d','--directory', default=None, 
+                        help="directory to process")
     parser.add_argument('-o','--output', type=str, nargs='?', default='lecroy.root',
                         help="Output root file")
     
@@ -279,6 +283,13 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
 
+
+
+    if args.directory != None:
+        flist = glob.glob(os.path.join(args.directory,'*.dat'))
+        comb = map(lambda x: os.path.join(args.directory, x), flist)
+        print comb
+        args.files = comb
     if len(args.files)==0:
         print "No files to process"
         sys.exit(1)
