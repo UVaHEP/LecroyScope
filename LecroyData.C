@@ -14,8 +14,10 @@ void ChannelData::SetTimeStamp(Int_t year, Int_t month, Int_t day,
 // default behavior is to set trigger time as t=0
 // if calib==true, return calibrated volts, else raw ADC samples
 // if sequential==true, time time is relative to 1st trigger in sequence
-TGraph *ChannelData::GetGraph(Bool_t calib, Bool_t sequential) const {
-  TGraph *tg=new TGraph();
+//TGraph *ChannelData::GetGraph(Bool_t calib, Bool_t sequential) const {
+TGraph *ChannelData::GetGraph(Bool_t calib, Bool_t sequential) {
+  //TGraph *tg = new TGraph();
+  //tg = new TGraph();
   TString name=(TString::Format("Channel %d",chanID));
   tg->SetName(name);
   if (calib) name+=";t[sec];Volts";
@@ -30,7 +32,12 @@ TGraph *ChannelData::GetGraph(Bool_t calib, Bool_t sequential) const {
     if (calib) yval=yval*vGain-vOffset;
     tg->SetPoint(i,t,yval);
   }
+
   return tg;
+
+  //gr0 = (TGraph*)tg->Clone();
+  //delete tg;
+  //return gr0;
 }
 
 
@@ -62,4 +69,14 @@ void ChannelData::Print() const{
 }
 
 
+ChannelData::ChannelData()
+{
+  tg = new TGraph();
+  chanOn = false;
+  chanID = -1;
+}
 
+ChannelData::~ChannelData()
+{
+  delete tg;
+}
