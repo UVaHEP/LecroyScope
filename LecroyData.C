@@ -40,6 +40,9 @@ TGraph *ChannelData::GetGraph(Bool_t calib, Bool_t sequential) {
   //return gr0;
 }
 
+void ChannelData::SetTimes(float *dat, Int_t n) {
+  time=vector<float>((float*)dat,dat+n);
+}
 
 void ChannelData::SetSamples(char *dat, Int_t n) {
   v=vector<Char_t>((Char_t*)dat,dat+n);

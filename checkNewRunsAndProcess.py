@@ -4,7 +4,8 @@ rawNames= os.listdir ('/eos/user/t/tanderso/2018-11-CMSTiming/Raw/') # get all f
 rawDirs = []
 for name in rawNames: # loop through all the files and folders
     if not os.path.isdir(os.path.join(os.path.abspath("."), name)): # check whether the current object is a folder 
-        rawDirs.append(name)
+        if 'Hammamatsu' not in name:
+            rawDirs.append(name)
 #print rawDirs
 
 rootNames= os.listdir ('/eos/user/t/tanderso/2018-11-CMSTiming/Root/') # get all files' and folders' names in the current directory

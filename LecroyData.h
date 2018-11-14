@@ -29,6 +29,7 @@ public:
   Double_t T0() const {return t0;}
   Int_t GetNpoints() const {return v.size();}
   vector<Char_t> *GetSamples() {return &v;}
+  vector<float> *GetTimes() {return &time;}
   
   // Simple Setters
   void SetChannelOn(Bool_t status=true) {chanOn=status;}
@@ -48,8 +49,10 @@ public:
   TGraph* GetGraph(Bool_t calib=false, Bool_t sequential=false) ;
   //  void AddSample(Float_t s) {v.push_back(s);}
   void SetSamples(char *dat, Int_t n);
+  void SetTimes(float *dat, Int_t n);
   Int_t GetNsamples() const {return v.size();}
   void ClearSamples() {v.clear();}
+  void ClearTimes() {time.clear();}
   Float_t GetTimeUncert() const {return horizUncert;}
   void Print() const;
 
@@ -73,6 +76,7 @@ private:
   Double_t  t0;            // offset time from 1st trigger for sequence mode
   // volts[i] = v[i]*v_gain-v_off
   vector<Char_t> v;        // voltage samples as signed characters
+  vector<float> time;         // time stored at t0 + iterator*tStep
   Float_t sigSig;          // estimate of signal significiance
 
   TGraph *tg;
